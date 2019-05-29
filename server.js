@@ -1,6 +1,5 @@
 
 const express = require('express');
-
 const app = express();
 
 app.use(express.static('assets'));
@@ -17,9 +16,22 @@ app.get('/userform', (req, res, next) => {
     res.json(response);
 })
 
+app.use('/store', (req, res, next) => {
+    console.log('Jestem pośrednikiem przy żądaniu do /store');
+    next();
+})
+
+app.get('/store', (req, res, next) => {
+    res.send('To jest sklep');
+})
+
 const server = app.listen(3000, 'localhost', () => {
     var host = server.address().address;
     var port = server.address().port;
 
     console.log('Przykładowa aplikacja nasłuchuje na http://' + host + ':' + port);
+})
+
+app.use((rez, res, next) => {
+    res.stattus(404).send('Wybacz, nie mogliśmy odnaleźć tego, czego żądasz!');
 })
